@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'singleton'
+require 'logger'
+require 'set'
+
+require_relative './loggers/stdout_logger'
+require_relative './storage'
+require_relative './config'
+require_relative './that/print'
+
+class Subscriptions
+  include Singleton
+
+  def initialize
+    @subs = {}
+  end
+
+  def subsribe(branch, subscriber)
+    @subs[branch] ||= Set.new
+    @subs[branch] << subscriber
+  end
+
+  def process(branch, event)
+    @subs.fetch(branch, []).each do |subscriber|
+      subscriber.call(event)
+    rescue StandardError => e
+      StdoutLogger.instance.error("#{subscriber}(#{event}) -> #{e}")
+    end
+  end
+end
+
+Subscriptions.instance.subsribe(:master, Printer)
+
+Thread.new do
+  loop do
+    Storage.instance.publish(:master, 'event message')
+    sleep 1
+  end
+end
+
+THREADS = CONFIG[:branches].map do |branch|
+  Thread.new do
+    loop do
+      event = Storage.instance.pull(branch)
+      Subscriptions.instance.process(branch, event)
+    end
+  end
+end
+
+THREADS.map(&:join)
