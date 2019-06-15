@@ -1,0 +1,5 @@
+AllCops:
+  DefaultFormatter: simple
+  TargetRailsVersion: 5.0
+Style/Documentation:
+  Enabled: false
