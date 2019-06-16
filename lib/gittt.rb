@@ -1,16 +1,28 @@
 # frozen_string_literal: true
 
-require_relative './logger/stdout'
 require_relative './storage'
 require_relative './subscriptions'
 
 module Gittt
   module_function
 
+  def config
+    @config
+  end
+
+  def config=(conf)
+    @config = conf
+    subscribe(conf.subscriptions)
+  end
+
   def read
-    @branches.map { |branch| branch_thread(branch) }.map(&:join)
+    config.branches.map { |branch| branch_thread(branch) }.map(&:join)
   rescue Interrupt
-    logger.info 'Exiting...'
+    logger.info 'Bye.'
+  end
+
+  def logger
+    config.logger
   end
 
   def branch_thread(branch)
@@ -20,16 +32,6 @@ module Gittt
         Gittt::Subscriptions.instance.process(branch, event)
       end
     end
-  end
-
-  def logger
-    @logger.instance
-  end
-
-  def config=(conf)
-    subscribe(conf.fetch(:subscriptions, {}))
-    @logger = conf.fetch(:logger, Logger::Stdout)
-    @branches = conf.fetch(:branches, [])
   end
 
   def subscribe(subscriptions)

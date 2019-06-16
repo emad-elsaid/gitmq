@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require_relative './config'
+require_relative './lib/config'
 require_relative './lib/gittt'
 
 WRITER = Thread.new do
@@ -11,5 +12,5 @@ WRITER = Thread.new do
   end
 end
 
-Gittt.config = CONFIG
+Gittt.config = Gittt::Config.new(CONFIG)
 Gittt.read
