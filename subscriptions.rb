@@ -12,15 +12,22 @@ class Subscriptions
   end
 
   def subsribe(branch, subscriber)
-    @subs[branch] ||= Set.new
-    @subs[branch] << subscriber
+    branch_subs(branch) << subscriber
   end
 
   def process(branch, event)
-    @subs.fetch(branch, []).each do |subscriber|
+    subs.fetch(branch, []).each do |subscriber|
       subscriber.call(event)
-    rescue StandardError => e
-      StdoutLogger.instance.error("#{subscriber}(#{event}) -> #{e}")
+    rescue StandardError => exp
+      StdoutLogger.instance.error("#{subscriber}(#{event}) -> #{exp}")
     end
+  end
+
+  private
+
+  attr_reader :subs
+
+  def branch_subs(branch)
+    subs[branch] ||= Set.new
   end
 end

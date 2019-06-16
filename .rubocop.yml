@@ -3,3 +3,5 @@ AllCops:
   TargetRailsVersion: 5.0
 Style/Documentation:
   Enabled: false
+Naming/RescuedExceptionsVariableName:
+  Enabled: false
