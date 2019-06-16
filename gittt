@@ -1,37 +1,15 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative './loggers/stdout_logger'
-require_relative './storage'
-require_relative './subscriptions'
 require_relative './config'
-
-# Subscribe to changes in branches
-CONFIG[:subscriptions].each do |branch, subscribers|
-  subscribers.each do |subscriber|
-    Subscriptions.instance.subsribe(branch, subscriber)
-  end
-end
+require_relative './lib/gittt'
 
 WRITER = Thread.new do
   loop do
-    Storage.instance.publish(:master, 'event message')
+    Gittt::Storage.instance.publish(:master, Time.now)
     sleep 1
   end
 end
 
-# Read from all watched branches and process them
-READERS = CONFIG[:branches].map do |branch|
-  Thread.new do
-    loop do
-      event = Storage.instance.pull(branch)
-      Subscriptions.instance.process(branch, event)
-    end
-  end
-end
-
-begin
-  READERS.map(&:join)
-rescue Interrupt
-  StdoutLogger.instance.info 'Exiting...'
-end
+Gittt.config = CONFIG
+Gittt.read

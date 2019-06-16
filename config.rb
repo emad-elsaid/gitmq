@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative './that/print'
+require_relative './lib/processor/printer'
 
 CONFIG = {
   branches: [:master],
   subscriptions: {
-    master: [Printer]
+    master: [Gittt::Processor::Printer]
   }
 }.freeze
