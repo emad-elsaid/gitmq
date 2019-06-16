@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-class StdoutLogger
+require 'logger'
+require 'singleton'
+
+class StdoutLogger < Logger
   include Singleton
 
   def initialize

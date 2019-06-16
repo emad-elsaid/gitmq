@@ -1,46 +1,27 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'singleton'
-require 'logger'
-require 'set'
-
 require_relative './loggers/stdout_logger'
 require_relative './storage'
+require_relative './subscriptions'
 require_relative './config'
-require_relative './that/print'
 
-class Subscriptions
-  include Singleton
-
-  def initialize
-    @subs = {}
-  end
-
-  def subsribe(branch, subscriber)
-    @subs[branch] ||= Set.new
-    @subs[branch] << subscriber
-  end
-
-  def process(branch, event)
-    @subs.fetch(branch, []).each do |subscriber|
-      subscriber.call(event)
-    rescue StandardError => e
-      StdoutLogger.instance.error("#{subscriber}(#{event}) -> #{e}")
-    end
+# Subscribe to changes in branches
+CONFIG[:subscriptions].each do |branch, subscribers|
+  subscribers.each do |subscriber|
+    Subscriptions.instance.subsribe(branch, subscriber)
   end
 end
 
-Subscriptions.instance.subsribe(:master, Printer)
-
-Thread.new do
+WRITER = Thread.new do
   loop do
     Storage.instance.publish(:master, 'event message')
     sleep 1
   end
 end
 
-THREADS = CONFIG[:branches].map do |branch|
+# Read from all watched branches and process them
+READERS = CONFIG[:branches].map do |branch|
   Thread.new do
     loop do
       event = Storage.instance.pull(branch)
@@ -49,4 +30,8 @@ THREADS = CONFIG[:branches].map do |branch|
   end
 end
 
-THREADS.map(&:join)
+begin
+  READERS.map(&:join)
+rescue Interrupt
+  StdoutLogger.instance.info 'Exiting...'
+end
