@@ -2,10 +2,14 @@
 
 require_relative './lib/processor/printer'
 require_relative './lib/logger/stdout'
+require_relative './lib/storage'
 
 CONFIG = {
   # logger instance
-  logger: Gittt::Logger::Stdout.instance,
+  logger: Gittt::Logger::Stdout.new,
+
+  # set where to store data
+  storage: Gittt::Storage.new,
 
   # classes that subscribe to each branch
   subscriptions: {

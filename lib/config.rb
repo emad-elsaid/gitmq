@@ -4,11 +4,11 @@ require_relative './logger/stdout'
 
 module Gittt
   class Config
-    attr_reader :subscriptions, :logger
+    attr_reader :subscriptions, :logger, :storage
 
     DEFAULTS = {
       subscriptions: [],
-      logger: Logger::Stdout.instance
+      logger: Logger::Stdout.new
     }.freeze
 
     def initialize(conf)
@@ -24,6 +24,6 @@ module Gittt
 
     private
 
-    attr_writer :subscriptions, :logger
+    attr_writer :subscriptions, :logger, :storage
   end
 end

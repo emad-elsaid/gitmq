@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative './storage'
 require_relative './subscriptions'
 
 module Gittt
@@ -8,10 +7,11 @@ module Gittt
     def initialize(conf)
       @config = conf
       @subscriptions = Subscriptions.new
+      @storage = conf.storage
       subscribe
     end
 
-    def read
+    def start
       config.branches.map { |branch| branch_thread(branch) }.map(&:join)
     rescue Interrupt
       logger.info 'Bye.'
@@ -19,7 +19,7 @@ module Gittt
 
     private
 
-    attr_reader :config, :subscriptions
+    attr_reader :config, :subscriptions, :storage
 
     def logger
       config.logger
@@ -28,7 +28,7 @@ module Gittt
     def branch_thread(branch)
       Thread.new do
         loop do
-          event = Gittt::Storage.instance.poll(branch)
+          event = storage.poll(branch)
           subscriptions.process(branch, event)
         end
       end

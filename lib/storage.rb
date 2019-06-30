@@ -4,8 +4,6 @@ require 'singleton'
 
 module Gittt
   class Storage
-    include Singleton
-
     def initialize
       @queues = {}
     end

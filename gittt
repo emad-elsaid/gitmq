@@ -4,13 +4,14 @@
 require_relative './config'
 require_relative './lib/gittt'
 
+config = Gittt::Config.new(CONFIG)
+consumer = Gittt::Consumer.new(config)
+
 WRITER = Thread.new do
   loop do
-    Gittt::Storage.instance.publish(:master, Time.now)
+    config.storage.publish(:master, Time.now)
     sleep 1
   end
 end
 
-config = Gittt::Config.new(CONFIG)
-consumer = Gittt::Consumer.new(config)
-consumer.read
+consumer.start
