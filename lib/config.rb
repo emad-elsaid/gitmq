@@ -4,10 +4,9 @@ require_relative './logger/stdout'
 
 module Gittt
   class Config
-    attr_reader :branches, :subscriptions, :logger
+    attr_reader :subscriptions, :logger
 
     DEFAULTS = {
-      branches: [],
       subscriptions: [],
       logger: Logger::Stdout.instance
     }.freeze
@@ -19,8 +18,12 @@ module Gittt
       end
     end
 
+    def branches
+      subscriptions.keys
+    end
+
     private
 
-    attr_writer :branches, :subscriptions, :logger
+    attr_writer :subscriptions, :logger
   end
 end
