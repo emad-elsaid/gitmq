@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 
 require 'set'
-require 'singleton'
 
 module Gittt
   class Subscriptions
-    include Singleton
-
     def initialize
       @subs = {}
     end
 
-    def subsribe(branch, subscriber)
-      branch_subs(branch) << subscriber
+    def subsribe(branch, subscribers)
+      branch_subs(branch).merge Array(subscribers)
     end
 
     def process(branch, event)

@@ -15,7 +15,7 @@ module Gittt
       @queues[branch] << event
     end
 
-    def pull(branch)
+    def poll(branch)
       init_branch(branch)
       @queues[branch].pop
     end
