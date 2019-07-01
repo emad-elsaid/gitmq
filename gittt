@@ -9,7 +9,7 @@ consumer = Gittt::Consumer.new(config)
 
 WRITER = Thread.new do
   loop do
-    config.storage.publish(:master, Time.now)
+    config.storage.publish('master', Time.now)
     sleep 1
   end
 end
