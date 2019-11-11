@@ -7,7 +7,7 @@ require_relative './lib/gittt'
 config = Gittt::Config.new(CONFIG)
 consumer = Gittt::Consumer.new(config)
 
-WRITER = Thread.new do
+Thread.new do
   loop do
     config.storage.publish('master', Time.now)
     sleep 1

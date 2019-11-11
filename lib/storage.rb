@@ -8,6 +8,9 @@ module Gittt
   class Storage
     extend Forwardable
 
+    WAIT_NON_EXISTING_BRANCH = 1 # seconds
+    WAIT_FOR_COMMIT = 1 # seconds
+
     def initialize(path)
       @path = path
       @repo = read_or_create_repo
@@ -25,7 +28,14 @@ module Gittt
     end
 
     def poll(branch)
-      Queue.new.pop
+      wait_for_branch(branch)
+      wait_for_commit(branch, @last_polled)
+
+      walker = Rugged::Walker.new(repo)
+      walker.push(repo.branches[branch].target)
+
+      @last_polled = walker.first
+      @last_polled.message
     end
 
     private
@@ -40,6 +50,14 @@ module Gittt
       rescue Rugged::RepositoryError
         Rugged::Repository.init_at(path, :bare)
       end
+    end
+
+    def wait_for_branch(branch)
+      sleep WAIT_NON_EXISTING_BRANCH until repo.branches.exist?(branch)
+    end
+
+    def wait_for_commit(branch, last_polled)
+      sleep WAIT_FOR_COMMIT until repo.branches[branch].target.oid != last_polled&.oid
     end
   end
 end
