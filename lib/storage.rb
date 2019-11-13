@@ -4,7 +4,7 @@ require 'forwardable'
 require 'fileutils'
 require 'rugged'
 
-module Gittt
+module GitMQ
   class Storage
     extend Forwardable
 

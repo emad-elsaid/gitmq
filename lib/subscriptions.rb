@@ -2,7 +2,7 @@
 
 require 'set'
 
-module Gittt
+module GitMQ
   class Subscriptions
     def initialize
       @subs = {}

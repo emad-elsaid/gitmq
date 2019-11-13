@@ -2,7 +2,7 @@
 
 require_relative './subscriptions'
 
-module Gittt
+module GitMQ
   class Consumer
     def initialize(conf)
       @config = conf

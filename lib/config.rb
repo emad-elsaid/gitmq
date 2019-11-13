@@ -2,7 +2,7 @@
 
 require_relative './logger/stdout'
 
-module Gittt
+module GitMQ
   class Config
     attr_reader :subscriptions, :logger, :storage
 

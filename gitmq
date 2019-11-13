@@ -2,10 +2,10 @@
 # frozen_string_literal: true
 
 require_relative './config'
-require_relative './lib/gittt'
+require_relative './lib/gitmq'
 
-config = Gittt::Config.new(CONFIG)
-consumer = Gittt::Consumer.new(config)
+config = GitMQ::Config.new(CONFIG)
+consumer = GitMQ::Consumer.new(config)
 
 Thread.new do
   loop do

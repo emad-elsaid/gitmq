@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Gittt
+module GitMQ
   module Processor
     class Printer
       def self.call(event)

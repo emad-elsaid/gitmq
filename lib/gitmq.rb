@@ -3,5 +3,5 @@
 require_relative './consumer'
 require_relative './config'
 
-module Gittt
+module GitMQ
 end

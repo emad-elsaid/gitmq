@@ -6,13 +6,13 @@ require_relative './lib/storage'
 
 CONFIG = {
   # logger instance
-  logger: Gittt::Logger::Stdout.new,
+  logger: GitMQ::Logger::Stdout.new,
 
   # set where to store data
-  storage: Gittt::Storage.new('/tmp/gittt_storage'),
+  storage: GitMQ::Storage.new('/tmp/gittt_storage'),
 
   # classes that subscribe to each branch
   subscriptions: {
-    'master' => [Gittt::Processor::Printer]
+    'master' => [GitMQ::Processor::Printer]
   }
 }.freeze

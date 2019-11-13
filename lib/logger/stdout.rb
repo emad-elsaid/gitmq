@@ -2,7 +2,7 @@
 
 require 'logger'
 
-module Gittt
+module GitMQ
   module Logger
     class Stdout < ::Logger
       def initialize

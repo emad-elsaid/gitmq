@@ -2,7 +2,7 @@
 
 require 'logger'
 
-module Gittt
+module GitMQ
   module Logger
     class File < ::Logger
       def initialize(path)
