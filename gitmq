@@ -1,10 +1,24 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative './config'
 require_relative './lib/gitmq'
+require_relative './lib/processor/printer'
+require_relative './lib/logger/stdout'
+require_relative './lib/storage'
 
-config = GitMQ::Config.new(CONFIG)
+config = GitMQ::Config.new(
+  # logger instance
+  logger: GitMQ::Logger::Stdout.new,
+
+  # set where to store data
+  storage: GitMQ::Storage.new('/tmp/gitmq_storage'),
+
+  # classes that subscribe to each branch
+  subscriptions: {
+    'master' => [GitMQ::Processor::Printer]
+  }
+)
+
 consumer = GitMQ::Consumer.new(config)
 
 Thread.new do
