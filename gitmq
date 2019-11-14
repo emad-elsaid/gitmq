@@ -20,10 +20,11 @@ config = GitMQ::Config.new(
 )
 
 consumer = GitMQ::Consumer.new(config)
+producer = GitMQ::Producer.new(config)
 
 Thread.new do
   loop do
-    config.storage.publish('master', Time.now)
+    producer.publish('master', Time.now)
     sleep 1
   end
 end
