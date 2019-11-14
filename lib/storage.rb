@@ -56,7 +56,7 @@ module GitMQ
     end
 
     def wait_for_commit(branch, last_polled)
-      sleep WAIT_FOR_COMMIT until repo.branches[branch].target.oid != last_polled&.oid
+      sleep WAIT_FOR_COMMIT until branch(branch).target.oid != last_polled&.oid
     end
   end
 end
