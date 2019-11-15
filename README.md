@@ -1,5 +1,9 @@
 # GitMQ : Git Message Queue
 
+---
+THIS IS INCOMPLETE IMPLEMENTATION
+---
+
 Hey, Good idea bad pitch, lets use Git as a messaging queue! lets use github to
 synchronize a cluster of them together.
 
