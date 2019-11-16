@@ -4,10 +4,9 @@ require_relative './logger/stdout'
 
 module GitMQ
   class Config
-    attr_reader :subscriptions, :logger, :storage
+    attr_reader :logger, :storage
 
     DEFAULTS = {
-      subscriptions: [],
       logger: Logger::Stdout.new
     }.freeze
 
@@ -24,6 +23,6 @@ module GitMQ
 
     private
 
-    attr_writer :subscriptions, :logger, :storage
+    attr_writer :logger, :storage
   end
 end

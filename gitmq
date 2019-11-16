@@ -11,22 +11,29 @@ config = GitMQ::Config.new(
   logger: GitMQ::Logger::Stdout.new,
 
   # set where to store data
-  storage: GitMQ::Storage.new('/tmp/gitmq_storage'),
-
-  # classes that subscribe to each branch
-  subscriptions: {
-    'master' => [GitMQ::Processor::Printer]
-  }
+  storage: GitMQ::Storage.new('/tmp/gitmq_storage')
 )
 
 consumer = GitMQ::Consumer.new(config)
 producer = GitMQ::Producer.new(config)
 
-Thread.new do
-  loop do
-    producer.publish('master', Time.now)
-    sleep 1
+[
+  Thread.new do
+    loop do
+      producer.publish('master', Time.now)
+      sleep 1
+    end
+  end,
+  Thread.new do
+    loop do
+      producer.publish('test', Time.now)
+      sleep 1
+    end
+  end,
+  Thread.new do
+    consumer.consume('master') { |m| puts 'master: ' + m }
+  end,
+  Thread.new do
+    consumer.consume('test') { |m| puts 'test: ' + m }
   end
-end
-
-consumer.start
+].map(&:join)

@@ -27,7 +27,6 @@ module GitMQ
     end
 
     def poll(branch)
-      wait_for_branch(branch)
       wait_for_commit(branch, @last_polled)
 
       walker = Rugged::Walker.new(repo)
@@ -35,6 +34,10 @@ module GitMQ
 
       @last_polled = walker.first
       @last_polled.message
+    end
+
+    def wait_branch(branch)
+      sleep WAIT_NON_EXISTING_BRANCH until repo.branches.exist?(branch)
     end
 
     private
@@ -49,10 +52,6 @@ module GitMQ
       rescue Rugged::RepositoryError
         Rugged::Repository.init_at(path, :bare)
       end
-    end
-
-    def wait_for_branch(branch)
-      sleep WAIT_NON_EXISTING_BRANCH until repo.branches.exist?(branch)
     end
 
     def wait_for_commit(branch, last_polled)
