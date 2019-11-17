@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
+require 'logger'
 require 'forwardable'
 require 'ostruct'
-
-require_relative './logger/stdout'
 
 module GitMQ
   class Config
@@ -14,7 +13,7 @@ module GitMQ
     ].freeze
 
     DEFAULTS = {
-      logger: Logger::Stdout.new
+      logger: Logger.new(STDOUT)
     }.freeze
 
     extend Forwardable
