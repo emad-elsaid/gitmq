@@ -8,7 +8,6 @@ branch = ARGV.shift
 consumer = ARGV.shift
 
 config = GitMQ::Config.new(
-  logger: Logger.new(STDOUT),
   storage: GitMQ::Storage.new(path),
   id: consumer
 )
