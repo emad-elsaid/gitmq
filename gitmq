@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require_relative './lib/gitmq'
-require_relative './lib/processor/printer'
 require_relative './lib/logger/stdout'
 require_relative './lib/storage'
 
@@ -17,23 +16,15 @@ config = GitMQ::Config.new(
 consumer = GitMQ::Consumer.new(config)
 producer = GitMQ::Producer.new(config)
 
-[
-  Thread.new do
-    loop do
-      producer.publish('master', Time.now)
-      sleep 1
-    end
-  end,
-  Thread.new do
-    loop do
-      producer.publish('test', Time.now)
-      sleep 1
-    end
-  end,
-  Thread.new do
-    consumer.consume('master') { |m| puts 'master: ' + m }
-  end,
-  Thread.new do
-    consumer.consume('test') { |m| puts 'test: ' + m }
+Thread.new do
+  loop do
+    producer.publish('master', Time.now)
+    producer.publish('test', Time.now)
+    sleep 1
   end
+end
+
+[
+  Thread.new { consumer.consume('master') { |m| puts 'master: ' + m } },
+  Thread.new { consumer.consume('test') { |m| puts 'test: ' + m } }
 ].map(&:join)
