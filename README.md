@@ -56,6 +56,16 @@ This idea is flexible and can be modified for several use cases:
 1. In the future you can join 2 branches or split a branch and have your
    consumers adapt to that
 
+
+There are many advantages to use this approach, which is inherited from how Git
+is designed
+
+1. Every message has an address (git commit hash)
+1. Every message can be traced to an author which is the application that
+   published it (you can use different names for each server or application
+   version)
+1. Every message has a creation date
+
 This idea can as simple as invoking git commands from your application with a
 system call, or use libgit to manipulate the repository for you, or even a small
 server application that communicate over a socket, or a repo service that
