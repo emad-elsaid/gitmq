@@ -10,7 +10,10 @@ config = GitMQ::Config.new(
   logger: GitMQ::Logger::Stdout.new,
 
   # set where to store data
-  storage: GitMQ::Storage.new('/tmp/gitmq_storage')
+  storage: GitMQ::Storage.new('/tmp/gitmq_storage'),
+
+  # application identifier, used for tagging consumed messages
+  id: 'consumer#1'
 )
 
 consumer = GitMQ::Consumer.new(config)

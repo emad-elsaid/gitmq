@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+require 'ostruct'
+
 require_relative './logger/stdout'
 
 module GitMQ
   class Config
-    attr_reader :logger, :storage
+    ATTRS = %i[
+      logger
+      storage
+      id
+    ].freeze
 
     DEFAULTS = {
       logger: Logger::Stdout.new
     }.freeze
 
+    extend Forwardable
+    def_instance_delegators :@conf, *ATTRS
+
     def initialize(conf)
-      full_conf = DEFAULTS.merge(conf)
-      full_conf.each do |key, value|
-        send("#{key}=", value)
-      end
+      full_conf = DEFAULTS.slice(*ATTRS).merge(conf)
+      @conf = OpenStruct.new(full_conf)
     end
-
-    def branches
-      subscriptions.keys
-    end
-
-    private
-
-    attr_writer :logger, :storage
   end
 end
