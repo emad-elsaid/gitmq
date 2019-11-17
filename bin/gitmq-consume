@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative '../lib/gitmq'
+
+path = ARGV.shift
+branch = ARGV.shift
+consumer = ARGV.shift
+
+config = GitMQ::Config.new(
+  logger: Logger.new(STDOUT),
+  storage: GitMQ::Storage.new(path),
+  id: consumer
+)
+
+consumer = GitMQ::Consumer.new(config)
+
+begin
+  consumer.consume(branch) { |m| puts m }
+rescue Interrupt
+  puts 'Bye.'
+end

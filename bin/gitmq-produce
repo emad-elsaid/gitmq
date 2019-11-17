@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative '../lib/gitmq'
+
+path = ARGV.shift
+branch = ARGV.shift
+
+config = GitMQ::Config.new(
+  logger: Logger.new(STDOUT),
+  storage: GitMQ::Storage.new(path)
+)
+
+producer = GitMQ::Producer.new(config)
+
+loop { producer.publish(branch, gets.strip) }
