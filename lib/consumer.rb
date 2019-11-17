@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative './subscriptions'
-
 module GitMQ
   class Consumer
     def initialize(conf)
