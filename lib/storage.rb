@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
-require 'forwardable'
 require 'fileutils'
 require 'rugged'
 
 module GitMQ
   class Storage
-    extend Forwardable
-
     WAIT_NON_EXISTING_BRANCH = 1 # seconds
     WAIT_FOR_COMMIT = 1 # seconds
 
@@ -26,14 +23,21 @@ module GitMQ
       Rugged::Tree::Builder.new(repo).write
     end
 
-    def poll(branch)
-      wait_for_commit(branch, @last_polled)
+    def poll(branch, tag)
+      wait_for_commit(branch, tag)
 
       walker = Rugged::Walker.new(repo)
       walker.push(repo.branches[branch].target)
 
-      @last_polled = walker.first
-      @last_polled.message
+      walker.first
+    end
+
+    def tags
+      @tags ||= Rugged::TagCollection.new(repo)
+    end
+
+    def tag(label, commit)
+      tags.create(label, commit, true)
     end
 
     def wait_branch(branch)
@@ -43,7 +47,6 @@ module GitMQ
     private
 
     attr_reader :path
-    def_delegator :@repo, :branches
 
     def read_or_create_repo
       FileUtils.mkdir_p(path) unless File.exist?(path)
@@ -54,8 +57,8 @@ module GitMQ
       end
     end
 
-    def wait_for_commit(branch, last_polled)
-      sleep WAIT_FOR_COMMIT until branch(branch).target.oid != last_polled&.oid
+    def wait_for_commit(branch, tag)
+      sleep WAIT_FOR_COMMIT until branch(branch).target.oid != tags[tag]&.target&.oid
     end
   end
 end

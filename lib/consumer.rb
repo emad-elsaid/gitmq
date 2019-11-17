@@ -5,19 +5,22 @@ module GitMQ
     def initialize(conf)
       @config = conf
       @storage = conf.storage
+      @id = conf.id
     end
 
     def consume(branch, &block)
       storage.wait_branch branch
+      label = "#{branch}-#{id}"
 
       loop do
-        event = storage.poll branch
-        block.call event
+        commit = storage.poll(branch, label)
+        block.call commit.message
+        storage.tag(label, commit)
       end
     end
 
     private
 
-    attr_reader :config, :storage
+    attr_reader :config, :storage, :id
   end
 end

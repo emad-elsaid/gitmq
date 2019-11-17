@@ -20,8 +20,8 @@ producer = GitMQ::Producer.new(config)
 
 Thread.new do
   loop do
-    producer.publish('master', Time.now)
-    producer.publish('test', Time.now)
+    producer.publish('master', "master message #{Time.now}")
+    producer.publish('test', "test message #{Time.now}")
     sleep 1
   end
 end
