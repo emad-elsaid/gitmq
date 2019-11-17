@@ -12,4 +12,9 @@ config = GitMQ::Config.new(
 
 producer = GitMQ::Producer.new(config)
 
-loop { producer.publish(branch, gets.strip) }
+loop do
+  producer.publish(branch, gets.strip)
+rescue Interrupt
+  puts 'Bye.'
+  exit
+end
