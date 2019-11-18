@@ -27,17 +27,15 @@ module GitMQ
       wait_for_commit(branch, tag)
 
       walker = Rugged::Walker.new(repo)
+      walker.sorting(Rugged::SORT_TOPO | Rugged::SORT_REVERSE)
       walker.push(repo.branches[branch].target)
+      walker.hide(repo.tags[tag].target) if repo.tags[tag]
 
       walker.first
     end
 
-    def tags
-      @tags ||= Rugged::TagCollection.new(repo)
-    end
-
     def tag(label, commit)
-      tags.create(label, commit, true)
+      repo.tags.create(label, commit, true)
     end
 
     def wait_branch(branch)
@@ -58,7 +56,7 @@ module GitMQ
     end
 
     def wait_for_commit(branch, tag)
-      sleep WAIT_FOR_COMMIT until branch(branch).target.oid != tags[tag]&.target&.oid
+      sleep WAIT_FOR_COMMIT until branch(branch).target.oid != repo.tags[tag]&.target&.oid
     end
   end
 end
