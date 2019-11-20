@@ -1,9 +1,5 @@
 # GitMQ : Git Message Queue
 
----
-THIS IS INCOMPLETE IMPLEMENTATION
----
-
 Hey, Good idea bad pitch, lets use Git as a messaging queue! lets use github to
 synchronize a cluster of them together.
 
@@ -70,5 +66,3 @@ This idea can as simple as invoking git commands from your application with a
 system call, or use libgit to manipulate the repository for you, or even a small
 server application that communicate over a socket, or a repo service that
 communicate over even HTTP, there are so many ways to implement that concept.
-
-## GitMQ is one implementation in Ruby
