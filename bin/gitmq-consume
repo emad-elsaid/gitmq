@@ -9,11 +9,12 @@ consumer = ARGV.shift
 
 consumer = GitMQ::Consumer.new(
   storage: GitMQ::Storage.new(path),
-  name: consumer
+  name: consumer,
+  branch: branch
 )
 
 begin
-  consumer.consume(branch) { |m| puts m }
+  consumer.consume { |m| puts m }
 rescue Interrupt
   puts 'Bye.'
 end

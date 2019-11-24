@@ -7,11 +7,12 @@ path = ARGV.shift
 branch = ARGV.shift
 
 producer = GitMQ::Producer.new(
-  storage: GitMQ::Storage.new(path)
+  storage: GitMQ::Storage.new(path),
+  branch: branch
 )
 
 loop do
-  producer.publish(branch, gets.strip)
+  producer.publish(gets.strip)
 rescue Interrupt
   puts 'Bye.'
   exit

@@ -2,18 +2,19 @@
 
 module GitMQ
   class Producer
-    def initialize(storage:)
+    def initialize(storage:, branch:)
       @storage = storage
+      @branch = branch
     end
 
-    def publish(branch, event)
+    def publish(event)
       commit = Rugged::Commit.create(
         @storage.repo,
         tree: @storage.tree,
         message: event.to_s,
-        parents: [@storage.branch(branch)&.target].compact
+        parents: [@storage.branch(@branch)&.target].compact
       )
-      @storage.branches.create(branch, commit, force: true)
+      @storage.branches.create(@branch, commit, force: true)
     end
   end
 end
