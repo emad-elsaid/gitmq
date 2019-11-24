@@ -66,3 +66,77 @@ This idea can as simple as invoking git commands from your application with a
 system call, or use libgit to manipulate the repository for you, or even a small
 server application that communicate over a socket, or a repo service that
 communicate over even HTTP, there are so many ways to implement that concept.
+
+# Installation
+
+Install the gem with
+```
+gem install gitmqueue
+```
+
+or add gitmqueue to your `Gemfile`
+```
+gem 'gitmqueue', '~> 0.1'
+```
+
+
+# Producing messages
+
+First create an instance of `GitMQueue::Storage`, to specify your storage place.
+
+```ruby
+storage = GitMQueue::Storage.new('/tmp/gitmqueue')
+```
+
+This is where your git repository will live, message producer will use this
+storage instance to write messages to any branch you wish.
+
+```ruby
+producer = GitMQueue::Producer.new(storage: storage, branch: 'master')
+```
+
+Now you can use `producer` to publish message to this branch.
+
+```ruby
+producer.publish('Hello, world!')
+```
+
+It will create a commit with `Hello, world!` as a message in the `master`
+branch.
+
+You can have as many producers as you wish for any number of branches, make sure
+to have one producer per branch to prevent race conditions between producers.
+
+# Consuming messages
+
+You need to create storage instance as we did with the producer, then
+instanciate your consumer
+
+```ruby
+consumer = GitMQueue::Consumer.new(storage: storage, name: 'consumer', branch:
+'master')
+```
+
+And start the consume process, this function will take a block of code that
+accept one parameter which is your message, this function will block your thread
+and execute the block each time a new commit appear in the branch
+
+```ruby
+consumer.consume do |message|
+    puts message
+end
+```
+
+You'll need to run it in another thread to prevent blocking your consumer if you
+wish to do other work in the same process.
+
+After your block finish execution the consumer will tag this commit with a git
+tag, the tag name will be the branch name + `.` + your consumer name, if your
+consumer name is `consumer1` and consuming from `master` branch, the tag will be
+`master.consumer1`, that tag will be overritten each time the consumer process a
+message.
+
+# Pushing and Pulling your data
+
+As for now there is no way to push/pull from the gem, so this part is up to you,
+until it's implemented in the gem.
