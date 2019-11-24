@@ -29,13 +29,7 @@ module GitMQ
 
     def poll(branch, tag)
       wait_for_commit(branch, tag)
-
-      walker = Rugged::Walker.new(repo)
-      walker.sorting(Rugged::SORT_TOPO | Rugged::SORT_REVERSE)
-      walker.push(repo.branches[branch].target)
-      walker.hide(repo.tags[tag].target) if repo.tags[tag]
-
-      walker.first
+      walker(branch, tag).first
     end
 
     def tag(label, commit)
@@ -49,6 +43,17 @@ module GitMQ
     private
 
     attr_reader :path
+
+    def walker(branch, tag)
+      walker = Rugged::Walker.new(repo)
+      walker.sorting(Rugged::SORT_TOPO | Rugged::SORT_REVERSE)
+      walker.push(branch(branch).target)
+
+      tag = repo.tags[tag]
+      walker.hide(tag.target) if tag
+
+      walker
+    end
 
     def read_or_create_repo
       FileUtils.mkdir_p(path) unless File.exist?(path)
