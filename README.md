@@ -140,3 +140,26 @@ message.
 
 As for now there is no way to push/pull from the gem, so this part is up to you,
 until it's implemented in the gem.
+
+# Gem executables
+
+## gitmqueue-produce
+
+Starts a process that waits you to enter any line and publish that as a message
+
+Usage:
+
+```
+gitmqueue /path/to/rpo branch-name
+```
+
+## gitmqueue-consume
+
+Starts a process that waits for messages, each message will be written to the
+terminal
+
+Usage:
+
+```
+gitmqueue /path/to/repo branch-name consumer-name
+```
