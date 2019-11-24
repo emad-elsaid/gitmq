@@ -3,7 +3,7 @@
 require 'fileutils'
 require 'rugged'
 
-module GitMQ
+module GitMQueue
   class Storage
     WAIT_NON_EXISTING_BRANCH = 1 # seconds
     WAIT_FOR_COMMIT = 1 # seconds

@@ -1,4 +1,4 @@
-# GitMQ : Git Message Queue
+# GitMQueue : Git Message Queue
 
 Hey, Good idea bad pitch, lets use Git as a messaging queue! lets use github to
 synchronize a cluster of them together.

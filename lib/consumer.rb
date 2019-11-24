@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GitMQ
+module GitMQueue
   class Consumer
     def initialize(storage:, name:, branch:)
       @storage = storage
