@@ -150,7 +150,7 @@ Starts a process that waits you to enter any line and publish that as a message
 Usage:
 
 ```
-gitmqueue /path/to/rpo branch-name
+gitmqueue-produce /path/to/rpo branch-name
 ```
 
 ## gitmqueue-consume
@@ -161,5 +161,5 @@ terminal
 Usage:
 
 ```
-gitmqueue /path/to/repo branch-name consumer-name
+gitmqueue-consume /path/to/repo branch-name consumer-name
 ```
