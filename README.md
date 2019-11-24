@@ -1,34 +1,38 @@
 # GitMQueue : Git Message Queue
 
-Hey, Good idea bad pitch, lets use Git as a messaging queue! lets use github to
+Hey, Crazy idea bad pitch, lets use Git as a messaging queue! lets use github to
 synchronize a cluster of them together.
 
-Lets get the obvious out of the way, You already know that we use Git to keep
-track of our code changes, and we need a central point to pull and push these
-changes (although it's designed to be decentralized), this is why we use
-github/lab/bitbucket...etc.
+![Screenshot-2019-11-24_22-41-55](https://user-images.githubusercontent.com/54403/69502136-09672400-0f0c-11ea-8707-df3164411c4e.png)
 
-Alright, now lets introduce another idea: Git commits doesn't need to include
-changes, so you don't have to create files then commit these files to
+
+Lets get the obvious out of the way.
+
+1. You already know that we use Git to keep track of our code changes, If you're a
+developer you most probably use it every day, and you probably know how to share
+your code changes with everybody else using some central repo server like Github
+or Bitbucket.
+
+1. Alright, now lets introduce another idea: **Git commits doesn't need to include
+changes**, You don't have to create files then commit these files to
 your git repo, you can create an empty commit with a command like this:
 
 ```
 git commit --allow-empty -m "commit message"
 ```
 
-OK, so the commit message can be any text right? that means you can have JSON
+1. OK, so the commit message can be any text right? that means you can have JSON
 messages or YAML or any other machine readable format as a commit message.
 
-So now imagine this scenario:
+## Now imagine this use case:
 
-1. Create a repo on github
+1. Create a repository on github
 1. Clone it to your server
 1. Have your application commit a `message` to this repo every time you need to
 1. Push the repo every period say 10 seconds
 1. Clone same repo to another server
-1. Have an application there (consumer) pull periodically
-1. Have Another thread there that checks for new commits and for each one of
-   them extracts the message and does the job
+1. Have an application pull periodically and checks for new commits and for each
+   one of them extracts the message and process it
 1. Put a git tag on the last processed message with that consumer identifier
 1. Push that label to keep track of the last processed message (pull it when you
    deploy that consumer again)
@@ -36,14 +40,14 @@ So now imagine this scenario:
 Now you have a queue of messages that can't be altered, communicated between
 servers and all data saved in a git repository.
 
-This idea is flexible and can be modified for several use cases:
+This idea is flexible and can be altered for several use cases:
 
-1. the central server doesn't have to be a github or a like, you can use your
+1. the central server doesn't have to be Github or a like, you can use your
    own server as a git server.
 1. You can have more than one queue for messages by creating many branches each
    for a type of messages or a different messages purpose.
 1. You can have the same branch consumed from different servers each message
-   processed multiple times in different ways like RabbitMQ fan out strategy
+   processed multiple times in different ways like RabbitMQ fanout strategy
 1. You can keep browse your message queue with any git client UI or CLI
 1. You can clean your servers git local repo so that it deletes old commit
    history to save space.
@@ -66,6 +70,8 @@ This idea can as simple as invoking git commands from your application with a
 system call, or use libgit to manipulate the repository for you, or even a small
 server application that communicate over a socket, or a repo service that
 communicate over even HTTP, there are so many ways to implement that concept.
+
+The current repository is an implementation of this concept in Ruby.
 
 # Installation
 
