@@ -15,8 +15,12 @@ module GitMQ
       @repo = read_or_create_repo
     end
 
+    def branches
+      repo.branches
+    end
+
     def branch(name)
-      repo.branches[name]
+      branches[name]
     end
 
     def tree

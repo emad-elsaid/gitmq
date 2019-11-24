@@ -7,12 +7,10 @@ path = ARGV.shift
 branch = ARGV.shift
 consumer = ARGV.shift
 
-config = GitMQ::Config.new(
+consumer = GitMQ::Consumer.new(
   storage: GitMQ::Storage.new(path),
-  id: consumer
+  name: consumer
 )
-
-consumer = GitMQ::Consumer.new(config)
 
 begin
   consumer.consume(branch) { |m| puts m }

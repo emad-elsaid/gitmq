@@ -6,11 +6,9 @@ require 'gitmq'
 path = ARGV.shift
 branch = ARGV.shift
 
-config = GitMQ::Config.new(
+producer = GitMQ::Producer.new(
   storage: GitMQ::Storage.new(path)
 )
-
-producer = GitMQ::Producer.new(config)
 
 loop do
   producer.publish(branch, gets.strip)

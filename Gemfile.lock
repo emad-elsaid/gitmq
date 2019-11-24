@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     gitmq (0.1.0)
-      rugged
+      rugged (~> 0.28)
 
 GEM
   remote: https://rubygems.org/
