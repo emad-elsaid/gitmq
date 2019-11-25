@@ -13,8 +13,10 @@ consumer = GitMQueue::Consumer.new(
   branch: branch
 )
 
+consumer.consume { |m| puts m }
+
 begin
-  consumer.consume { |m| puts m }
+  sleep
 rescue Interrupt
   puts 'Bye.'
 end

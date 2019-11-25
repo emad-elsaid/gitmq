@@ -124,8 +124,8 @@ consumer = GitMQueue::Consumer.new(storage: storage, name: 'consumer', branch:
 ```
 
 And start the consume process, this function will take a block of code that
-accept one parameter which is your message, this function will block your thread
-and execute the block each time a new commit appear in the branch
+accept one parameter which is your message, this function is non-blocking
+it will execute the block of code each time a new commit appear in the branch
 
 ```ruby
 consumer.consume do |message|
@@ -133,14 +133,17 @@ consumer.consume do |message|
 end
 ```
 
-You'll need to run it in another thread to prevent blocking your consumer if you
-wish to do other work in the same process.
-
 After your block finish execution the consumer will tag this commit with a git
-tag, the tag name will be the branch name + `.` + your consumer name, if your
-consumer name is `consumer1` and consuming from `master` branch, the tag will be
-`master.consumer1`, that tag will be overritten each time the consumer process a
-message.
+tag, the tag name will be the consumer name, if your consumer name is
+`consumer1`, the tag will be `consumer1`, as git tags are global to all the
+repository you need to make the consumer name unique not just for the branch but
+for all the repository, so if you want to consume 2 branches from one consumer
+you'll have to choose to different names so that tags are not overriden be every
+consumer instance, you can adopt a naming scheme that involve the branch name,
+while implementing this gem we had that name tag name as `branch.consumer` but
+then thought it'll be better for the user to make this decision to allow for a
+more flexible naming, the tag will be overritten after each time the consumer
+process a message.
 
 # Pushing and Pulling your data
 
