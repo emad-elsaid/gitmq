@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gitmqueue (0.1.0)
+    gitmqueue (0.1.2)
       listen (~> 3.2.0)
       rugged (~> 0.28)
 

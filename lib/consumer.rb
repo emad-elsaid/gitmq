@@ -16,6 +16,7 @@ module GitMQueue
 
     def consume(&block)
       @block = block
+      consume_commits
       listener.start
     end
 
@@ -27,11 +28,15 @@ module GitMQueue
 
     def listener
       @listener ||= Listen.to(branch_file, only: /#{Regexp.escape(@branch)}/) do
-        commits = @storage.commits(@branch, @name)
-        commits.each do |commit|
-          @block.call commit.message
-          @storage.tag(@name, commit)
-        end
+        consume_commits
+      end
+    end
+
+    def consume_commits
+      commits = @storage.commits(@branch, @name)
+      commits.each do |commit|
+        @block.call commit.message
+        @storage.tag(@name, commit)
       end
     end
   end
