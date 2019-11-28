@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'gitmqueue'
+require 'gitmq'
 
 path = ARGV.shift
 branch = ARGV.shift
 
-producer = GitMQueue::Producer.new(
-  storage: GitMQueue::Storage.new(path),
+producer = GitMQ::Producer.new(
+  storage: GitMQ::Storage.new(path),
   branch: branch
 )
 

@@ -5,8 +5,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'gitmqueue'
-  spec.version       = GitMQueue::VERSION
+  spec.name          = 'gitmq'
+  spec.version       = GitMQ::VERSION
   spec.authors       = ['Emad Elsaid']
   spec.email         = ['emad.elsaid.hamed@gmail.com']
 
@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.description   = <<-DESC
   An interface to use Git repositories as a message queue to communicate between services'
   DESC
-  spec.homepage      = 'https://www.github.com/emad-elsaid/gitmqueue'
+  spec.homepage      = 'https://www.github.com/emad-elsaid/gitmq'
   spec.license       = 'MIT'
 
   spec.metadata['homepage_uri'] = spec.homepage

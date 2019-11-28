@@ -1,4 +1,4 @@
-# GitMQueue : Git Message Queue
+# GitMQ : Git Message Queue
 
 Hey, Crazy idea bad pitch, lets use Git as a messaging queue! lets use github to
 synchronize a cluster of them together.
@@ -77,28 +77,28 @@ The current repository is an implementation of this concept in Ruby.
 
 Install the gem with
 ```
-gem install gitmqueue
+gem install gitmq
 ```
 
-or add gitmqueue to your `Gemfile`
+or add gitmq to your `Gemfile`
 ```
-gem 'gitmqueue', '~> 0.1'
+gem 'gitmq', '~> 0.1'
 ```
 
 
 # Producing messages
 
-First create an instance of `GitMQueue::Storage`, to specify your storage place.
+First create an instance of `GitMQ::Storage`, to specify your storage place.
 
 ```ruby
-storage = GitMQueue::Storage.new('/tmp/gitmqueue')
+storage = GitMQ::Storage.new('/tmp/gitmq')
 ```
 
 This is where your git repository will live, message producer will use this
 storage instance to write messages to any branch you wish.
 
 ```ruby
-producer = GitMQueue::Producer.new(storage: storage, branch: 'master')
+producer = GitMQ::Producer.new(storage: storage, branch: 'master')
 ```
 
 Now you can use `producer` to publish message to this branch.
@@ -119,7 +119,7 @@ You need to create storage instance as we did with the producer, then
 instanciate your consumer
 
 ```ruby
-consumer = GitMQueue::Consumer.new(storage: storage, name: 'consumer', branch:
+consumer = GitMQ::Consumer.new(storage: storage, name: 'consumer', branch:
 'master')
 ```
 
@@ -152,17 +152,17 @@ until it's implemented in the gem.
 
 # Gem executables
 
-## gitmqueue-produce
+## gitmq-produce
 
 Starts a process that waits you to enter any line and publish that as a message
 
 Usage:
 
 ```
-gitmqueue-produce /path/to/rpo branch-name
+gitmq-produce /path/to/rpo branch-name
 ```
 
-## gitmqueue-consume
+## gitmq-consume
 
 Starts a process that waits for messages, each message will be written to the
 terminal
@@ -170,5 +170,5 @@ terminal
 Usage:
 
 ```
-gitmqueue-consume /path/to/repo branch-name consumer-name
+gitmq-consume /path/to/repo branch-name consumer-name
 ```

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module GitMQueue
+module GitMQ
   class Producer
     def initialize(storage:, branch:)
       @storage = storage

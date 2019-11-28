@@ -3,7 +3,7 @@
 require 'fileutils'
 require 'rugged'
 
-module GitMQueue
+module GitMQ
   class Storage
     attr_reader :repo, :path
 

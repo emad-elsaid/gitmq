@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-module GitMQueue
+module GitMQ
   VERSION = '0.1.2'
 end

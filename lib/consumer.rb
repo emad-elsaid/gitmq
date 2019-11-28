@@ -2,7 +2,7 @@
 
 require 'listen'
 
-module GitMQueue
+module GitMQ
   class Consumer
     def initialize(storage:, name:, branch:)
       @storage = storage
