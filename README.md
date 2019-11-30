@@ -1,5 +1,7 @@
 # GitMQ : Git Message Queue
 
+[![Gem Version](https://badge.fury.io/rb/gitmq.svg)](https://badge.fury.io/rb/gitmq)
+
 Hey, Crazy idea bad pitch, lets use Git as a messaging queue! lets use github to
 synchronize a cluster of them together.
 
